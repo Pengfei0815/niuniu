@@ -64,16 +64,21 @@ def configure_page() -> None:
         <style>
         .block-container {
             max-width: 1180px;
-            padding-top: 2.35rem;
+            padding-top: 0.7rem;
             padding-bottom: 2.4rem;
             padding-left: 1.1rem;
             padding-right: 1.1rem;
+        }
+        .top-safe-space {
+            height: 3.1rem;
         }
         .hero {
             border: 1px solid rgba(15, 23, 42, 0.08);
             border-radius: 16px;
             padding: 1.55rem 1.25rem 1.25rem 1.25rem;
-            margin: 0.65rem 0 1rem 0;
+            margin: 0 0 1rem 0;
+            min-height: 7.1rem;
+            box-sizing: border-box;
             background:
                 linear-gradient(135deg, rgba(10, 95, 115, 0.12), rgba(214, 125, 48, 0.12)),
                 #ffffff;
@@ -162,12 +167,15 @@ def configure_page() -> None:
         }
         @media (max-width: 760px) {
             .block-container {
-                padding: 2rem 0.75rem 1.8rem 0.75rem;
+                padding: 0.7rem 0.75rem 1.8rem 0.75rem;
+            }
+            .top-safe-space {
+                height: 3.65rem;
             }
             .hero {
                 border-radius: 16px;
                 padding: 1.4rem 1rem 1rem 1rem;
-                margin-top: 0.55rem;
+                min-height: 6.9rem;
             }
             .app-title {
                 font-size: 1.72rem;
@@ -492,7 +500,8 @@ def main() -> None:
     """Run the Streamlit application."""
     configure_page()
     st.markdown(
-        """<div class="hero">
+        """<div class="top-safe-space"></div>
+        <div class="hero">
           <div class="app-title">何时吃上牛</div>
           <div class="app-subtitle">排队不是玄学。用生存模型估计你大概什么时候能吃上牛牛。</div>
         </div>

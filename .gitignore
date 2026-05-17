@@ -5,6 +5,7 @@ __pycache__/
 .ruff_cache/
 .mplconfig/
 .cache/
+.streamlit_logs/
 figures/*.png
 !figures/.gitkeep
 !figures/summary.png

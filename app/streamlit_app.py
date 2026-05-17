@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import sys
+import importlib
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 os.environ.setdefault("MPLCONFIGDIR", str(PROJECT_ROOT / ".mplconfig"))
@@ -15,8 +16,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 
-from queue_model import TruncatedLognormalDiningTime, TruncatedWeibullDiningTime, predict_entry_time
+import queue_model.prediction as prediction_module
+import queue_model.simulation as simulation_module
+from queue_model import TruncatedLognormalDiningTime, TruncatedWeibullDiningTime
 from queue_model.utils import minutes_to_clock
+
+simulation_module = importlib.reload(simulation_module)
+prediction_module = importlib.reload(prediction_module)
+predict_entry_time = prediction_module.predict_entry_time
 
 
 TIME_OPTIONS = {
@@ -259,7 +266,7 @@ def render_single_prediction(
         if table_age_mode == "统一桌龄":
             uniform_age = st.slider("每桌已用餐分钟数", min_value=0.0, max_value=119.0, value=45.0, step=1.0)
 
-        run_button = st.button("更新预测", type="primary", use_container_width=True)
+        run_button = st.button("更新预测", type="primary", width="stretch")
         st.caption("默认从 16:00 第一波入座开始模拟；平稳近似只适合较晚且接近稳定的满座时段。")
 
     with output_col:
@@ -371,7 +378,7 @@ def render_comparison(
                 "中位进场": minutes_to_clock(float(result["median_entry_time"])),
             }
         )
-    st.dataframe(rows, hide_index=True, use_container_width=True)
+    st.dataframe(rows, hide_index=True, width="stretch")
 
 
 def render_sidebar():
@@ -445,7 +452,7 @@ def main() -> None:
     )
     summary_image = PROJECT_ROOT / "figures" / "summary.png"
     if summary_image.exists():
-        st.image(str(summary_image), use_container_width=True)
+        st.image(str(summary_image), width="stretch")
 
     params = render_sidebar()
     tab_single, tab_compare = st.tabs(["单人预测", "时段对比"])

@@ -7,4 +7,4 @@ __pycache__/
 .cache/
 figures/*.png
 !figures/.gitkeep
-
+!figures/summary.png

@@ -24,8 +24,6 @@
 4. `Main file path` 填 `app/streamlit_app.py`。
 5. 点击 Deploy，完成后把生成的 `https://...streamlit.app` 链接发给别人即可。
 
-本地开发时仍然可以打开：
-
 ## 本地前端
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501)

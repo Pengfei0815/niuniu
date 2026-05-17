@@ -6,14 +6,14 @@ import os
 from pathlib import Path
 import sys
 
-import matplotlib.pyplot as plt
-import numpy as np
-import streamlit as st
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 os.environ.setdefault("MPLCONFIGDIR", str(PROJECT_ROOT / ".mplconfig"))
 os.environ.setdefault("XDG_CACHE_HOME", str(PROJECT_ROOT / ".cache"))
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
+
+import matplotlib.pyplot as plt
+import numpy as np
+import streamlit as st
 
 from queue_model import TruncatedLognormalDiningTime, TruncatedWeibullDiningTime, predict_entry_time
 from queue_model.utils import minutes_to_clock
@@ -47,7 +47,7 @@ TIME_OPTIONS = {
 def configure_page() -> None:
     """Configure Streamlit page metadata and styling."""
     st.set_page_config(
-        page_title="牛New排队等待时间预测",
+        page_title="何时吃上牛",
         page_icon="N",
         layout="wide",
         initial_sidebar_state="expanded",
@@ -60,11 +60,13 @@ def configure_page() -> None:
             padding-bottom: 2.4rem;
         }
         .app-title {
-            font-size: 2.1rem;
+            font-size: 2.35rem;
             font-weight: 760;
             color: #102A43;
-            line-height: 1.2;
+            line-height: 1.12;
             margin-bottom: 0.3rem;
+            overflow: visible;
+            overflow-wrap: anywhere;
         }
         .app-subtitle {
             color: #52606D;
@@ -381,6 +383,12 @@ def render_sidebar():
         )
         st.metric("平均用餐时长", f"{distribution.mean():.1f} 分钟")
         st.metric("用满 120 分钟概率", f"{distribution.prob_full_duration():.1%}")
+        with st.expander("为什么用 Monte Carlo"):
+            st.write(
+                "单桌用餐时间的均值可以直接算，但目标等待时间是所有桌子未来释放事件排序后的第 k+1 个事件。"
+                "这个顺序统计量叠加了条件剩余寿命、120 分钟点质量和多轮翻台卷积，闭式分位数通常不可得。"
+                "Monte Carlo 直接模拟释放过程，更适合输出中位数、90% 分位和 30/60/90 分钟内进场概率。"
+            )
 
     return (
         distribution_name,
@@ -397,7 +405,7 @@ def render_sidebar():
 def main() -> None:
     """Run the Streamlit application."""
     configure_page()
-    st.markdown('<div class="app-title">牛New寿喜烧排队等待时间预测</div>', unsafe_allow_html=True)
+    st.markdown('<div class="app-title">何时吃上牛</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="app-subtitle">基于截断生存模型和 Monte Carlo 释放过程的交互式预测界面。</div>',
         unsafe_allow_html=True,
@@ -416,4 +424,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

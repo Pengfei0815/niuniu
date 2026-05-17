@@ -6,9 +6,27 @@
 
 项目把每桌用餐时长看作带 120 分钟上限的 survival time，并用 Monte Carlo 方法模拟未来多桌释放过程。输出不是单一点估计，而是等待时间和进场时间的分布摘要。
 
-## 前端快速访问
+## 在线访问
 
-启动本地交互式前端后，可以直接打开：
+这个前端是 Streamlit 应用，推荐部署到 Streamlit Community Cloud，部署后会得到一个可以分享给别人的公开 HTTPS 链接。
+
+部署入口：
+
+- Repository: `Pengfei0815/niuniu`
+- Branch: `main`
+- Main file path: `app/streamlit_app.py`
+
+部署步骤：
+
+1. 把当前代码推送到 GitHub。
+2. 打开 [Streamlit Community Cloud](https://share.streamlit.io/)。
+3. 新建 App，选择 `Pengfei0815/niuniu` 仓库。
+4. `Main file path` 填 `app/streamlit_app.py`。
+5. 点击 Deploy，完成后把生成的 `https://...streamlit.app` 链接发给别人即可。
+
+本地开发时仍然可以打开：
+
+## 本地前端
 
 [http://127.0.0.1:8501](http://127.0.0.1:8501)
 
@@ -47,6 +65,17 @@ $$
 $$
 W_k(c) = D_{(k+1)}(c).
 $$
+
+## 为什么使用 Monte Carlo
+
+单桌用餐时间模型的均值、CDF 和 survival function 可以直接计算；但这里真正要预测的是所有桌子未来释放事件合并排序后的第 $k+1$ 个事件。这个量同时包含：
+
+- 当前每张桌子的条件剩余寿命；
+- 120 分钟处的点质量；
+- 多张桌子、多轮翻台后的随机和；
+- 排序后的顺序统计量 $D_{(k+1)}(c)$。
+
+这些组合后通常没有简单闭式分布，尤其是分位数和 $P(W \le 30)$、$P(W \le 60)$ 这类概率。Monte Carlo 的作用是直接模拟未来释放过程，用样本分布稳定地估计均值、中位数、分位数和概率。若只预测非常简单的场景，例如单桌剩余时间或不考虑排序的总用餐时间，才更适合直接解析计算。
 
 ## 安装方法
 

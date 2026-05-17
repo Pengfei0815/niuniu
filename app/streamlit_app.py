@@ -56,22 +56,39 @@ def configure_page() -> None:
         """
         <style>
         .block-container {
-            padding-top: 1.6rem;
+            padding-top: 2.2rem;
             padding-bottom: 2.4rem;
         }
         .app-title {
+            display: block;
             font-size: 2.35rem;
             font-weight: 760;
             color: #102A43;
-            line-height: 1.12;
-            margin-bottom: 0.3rem;
+            line-height: 1.32;
+            min-height: 3.2rem;
+            padding-top: 0.15rem;
+            padding-bottom: 0.1rem;
+            margin-bottom: 0.2rem;
             overflow: visible;
             overflow-wrap: anywhere;
         }
         .app-subtitle {
             color: #52606D;
             font-size: 1.02rem;
+            margin-bottom: 0.55rem;
+        }
+        .repo-note {
+            color: #52606D;
+            font-size: 0.92rem;
             margin-bottom: 1.0rem;
+        }
+        .repo-note a {
+            color: #0B7285;
+            font-weight: 650;
+            text-decoration: none;
+        }
+        .repo-note a:hover {
+            text-decoration: underline;
         }
         .summary-band {
             border: 1px solid #D9E2EC;
@@ -408,6 +425,18 @@ def main() -> None:
     st.markdown('<div class="app-title">何时吃上牛</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="app-subtitle">基于截断生存模型和 Monte Carlo 释放过程的交互式预测界面。</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="repo-note">
+          GitHub:
+          <a href="https://github.com/Pengfei0815/niuniu" target="_blank">
+            Pengfei0815/niuniu
+          </a>
+          · 欢迎共同维护，也欢迎 fork 后改进。
+        </div>
+        """,
         unsafe_allow_html=True,
     )
     summary_image = PROJECT_ROOT / "figures" / "summary.png"

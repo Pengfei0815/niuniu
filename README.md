@@ -12,15 +12,6 @@
 
 [https://niuniu-fgdh5lgft5b9aabjjtdy3b.streamlit.app/](https://niuniu-fgdh5lgft5b9aabjjtdy3b.streamlit.app/)
 
-## 本地前端
-
-[http://127.0.0.1:8501](http://127.0.0.1:8501)
-
-启动命令：
-
-```bash
-streamlit run app/streamlit_app.py
-```
 
 ## 统计模型概述
 

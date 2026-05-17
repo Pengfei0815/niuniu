@@ -58,6 +58,14 @@ python examples/compare_arrival_times.py
 pytest
 ```
 
+启动交互式前端：
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+前端提供单人进场预测和不同时段取号对比，可以调节当前时间、前方桌数、餐桌数、分布参数和 Monte Carlo 次数。
+
 `compare_arrival_times.py` 会把图保存到：
 
 ```text
@@ -122,6 +130,8 @@ niuniu/
     test_prediction.py
   docs/
     model_document.md
+  app/
+    streamlit_app.py
 ```
 
 ## 后续改进方向

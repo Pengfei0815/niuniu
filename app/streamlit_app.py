@@ -64,33 +64,32 @@ def configure_page() -> None:
         <style>
         .block-container {
             max-width: 1180px;
-            padding-top: 1.65rem;
+            padding-top: 2.35rem;
             padding-bottom: 2.4rem;
             padding-left: 1.1rem;
             padding-right: 1.1rem;
         }
         .hero {
             border: 1px solid rgba(15, 23, 42, 0.08);
-            border-radius: 18px;
-            padding: 1.35rem 1.25rem 1.15rem 1.25rem;
-            margin-bottom: 1rem;
+            border-radius: 16px;
+            padding: 1.55rem 1.25rem 1.25rem 1.25rem;
+            margin: 0.65rem 0 1rem 0;
             background:
                 linear-gradient(135deg, rgba(10, 95, 115, 0.12), rgba(214, 125, 48, 0.12)),
                 #ffffff;
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-            overflow: visible;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
         }
         .app-title {
             display: block;
-            font-size: 2.25rem;
+            font-size: 2.18rem;
             font-weight: 820;
             color: #0F2433;
-            line-height: 1.28;
-            min-height: 3rem;
-            padding-top: 0.12rem;
-            padding-bottom: 0.08rem;
+            line-height: 1.35;
+            min-height: 3.2rem;
+            padding: 0;
             margin-bottom: 0.1rem;
-            overflow: visible;
+            overflow: hidden;
             letter-spacing: 0;
         }
         .app-subtitle {
@@ -163,16 +162,17 @@ def configure_page() -> None:
         }
         @media (max-width: 760px) {
             .block-container {
-                padding: 1.25rem 0.75rem 1.8rem 0.75rem;
+                padding: 2rem 0.75rem 1.8rem 0.75rem;
             }
             .hero {
                 border-radius: 16px;
-                padding: 1.2rem 1rem 1rem 1rem;
+                padding: 1.4rem 1rem 1rem 1rem;
+                margin-top: 0.55rem;
             }
             .app-title {
-                font-size: 1.86rem;
-                line-height: 1.32;
-                min-height: 2.8rem;
+                font-size: 1.72rem;
+                line-height: 1.42;
+                min-height: 2.9rem;
             }
             .app-subtitle {
                 font-size: 0.94rem;

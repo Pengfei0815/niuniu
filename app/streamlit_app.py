@@ -64,7 +64,7 @@ def configure_page() -> None:
         <style>
         .block-container {
             max-width: 1180px;
-            padding-top: 1.1rem;
+            padding-top: 1.65rem;
             padding-bottom: 2.4rem;
             padding-left: 1.1rem;
             padding-right: 1.1rem;
@@ -72,20 +72,24 @@ def configure_page() -> None:
         .hero {
             border: 1px solid rgba(15, 23, 42, 0.08);
             border-radius: 18px;
-            padding: 1.1rem 1.25rem;
+            padding: 1.35rem 1.25rem 1.15rem 1.25rem;
             margin-bottom: 1rem;
             background:
                 linear-gradient(135deg, rgba(10, 95, 115, 0.12), rgba(214, 125, 48, 0.12)),
                 #ffffff;
             box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            overflow: visible;
         }
         .app-title {
             display: block;
-            font-size: 2.45rem;
+            font-size: 2.25rem;
             font-weight: 820;
             color: #0F2433;
-            line-height: 1.08;
-            margin-bottom: 0.2rem;
+            line-height: 1.28;
+            min-height: 3rem;
+            padding-top: 0.12rem;
+            padding-bottom: 0.08rem;
+            margin-bottom: 0.1rem;
             overflow: visible;
             letter-spacing: 0;
         }
@@ -159,14 +163,16 @@ def configure_page() -> None:
         }
         @media (max-width: 760px) {
             .block-container {
-                padding: 0.7rem 0.75rem 1.8rem 0.75rem;
+                padding: 1.25rem 0.75rem 1.8rem 0.75rem;
             }
             .hero {
                 border-radius: 16px;
-                padding: 0.95rem 1rem;
+                padding: 1.2rem 1rem 1rem 1rem;
             }
             .app-title {
-                font-size: 2.0rem;
+                font-size: 1.86rem;
+                line-height: 1.32;
+                min-height: 2.8rem;
             }
             .app-subtitle {
                 font-size: 0.94rem;

@@ -8,21 +8,9 @@
 
 ## 在线访问
 
-这个前端是 Streamlit 应用，推荐部署到 Streamlit Community Cloud，部署后会得到一个可以分享给别人的公开 HTTPS 链接。
+可以直接打开在线交互式前端：
 
-部署入口：
-
-- Repository: `Pengfei0815/niuniu`
-- Branch: `main`
-- Main file path: `app/streamlit_app.py`
-
-部署步骤：
-
-1. 把当前代码推送到 GitHub。
-2. 打开 [Streamlit Community Cloud](https://share.streamlit.io/)。
-3. 新建 App，选择 `Pengfei0815/niuniu` 仓库。
-4. `Main file path` 填 `app/streamlit_app.py`。
-5. 点击 Deploy，完成后把生成的 `https://...streamlit.app` 链接发给别人即可。
+[https://niuniu-fgdh5lgft5b9aabjjtdy3b.streamlit.app/](https://niuniu-fgdh5lgft5b9aabjjtdy3b.streamlit.app/)
 
 ## 本地前端
 

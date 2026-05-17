@@ -37,7 +37,7 @@ W_k(c) = D_{(k+1)}(c).
 ## 安装方法
 
 ```bash
-cd restaurant-queue-survival-model
+cd niuniu
 pip install -r requirements.txt
 ```
 
@@ -95,7 +95,7 @@ python examples/synthetic_demo.py
 ## 仓库结构
 
 ```text
-restaurant-queue-survival-model/
+niuniu/
   README.md
   requirements.txt
   pyproject.toml
@@ -129,4 +129,3 @@ restaurant-queue-survival-model/
 - 建模不同人数、桌型、拼桌规则对等待时间的影响。
 - 加入 no-show、过号、暂停放号等运营机制。
 - 用后验预测分布表达参数不确定性。
-

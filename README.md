@@ -43,6 +43,13 @@ $$
 W_k(c) = D_{(k+1)}(c).
 $$
 
+当前默认使用 `model_v2`：从 16:00 第一波入座开始模拟到当前时刻，再预测未来释放事件。旧版平稳桌龄近似记录为 `model_v1`。
+
+模型版本说明：
+
+- [model_v1：平稳桌龄近似模型](model/model_v1.md)
+- [model_v2：从 16:00 开始的 transient 满座模型](model/model_v2.md)
+
 ## 为什么使用 Monte Carlo
 
 单桌用餐时间模型的均值、CDF 和 survival function 可以直接计算；但这里真正要预测的是所有桌子未来释放事件合并排序后的第 $k+1$ 个事件。这个量同时包含：
@@ -99,7 +106,7 @@ python examples/synthetic_demo.py
 示例设定：
 
 - 餐桌数：40
-- 用餐时间：`TruncatedWeibullDiningTime(shape=3, scale=95, max_time=120)`
+- 用餐时间：`TruncatedWeibullDiningTime(shape=8, scale=95, max_time=120)`
 - 当前时间：18:00，即 `current_time=120`
 - 前方桌数：20
 
@@ -118,7 +125,7 @@ python examples/synthetic_demo.py
 - `median_entry_time`：中位进场时间
 - `q10_entry_time` / `q90_entry_time`：进场时间分位数
 
-当没有真实当前桌龄 `table_ages` 时，代码使用“持续满座的平稳续订过程”近似生成当前桌龄。这个近似适合餐厅 16:00 后基本满座、桌子一空就补下一桌的情形。
+当没有真实当前桌龄 `table_ages` 时，默认模型会从 16:00 第一波入座开始模拟到当前时间，再继续预测未来释放事件。旧版“持续满座的平稳续订过程”近似仍可在前端中手动选择，用于较晚且接近稳定的满座时段。
 
 ## 仓库结构
 
@@ -148,6 +155,9 @@ niuniu/
     test_prediction.py
   docs/
     model_document.md
+  model/
+    model_v1.md
+    model_v2.md
   app/
     streamlit_app.py
 ```

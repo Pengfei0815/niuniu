@@ -32,3 +32,19 @@ def test_larger_queue_ahead_has_larger_mean_wait() -> None:
 
     assert float(long_queue["mean_wait"]) > float(short_queue["mean_wait"])
 
+
+def test_transient_model_respects_early_opening_time() -> None:
+    """At 16:30, transient ages should not exceed 30 minutes."""
+    distribution = TruncatedWeibullDiningTime(shape=8.0, scale=95.0, max_time=120.0)
+    result = predict_entry_time(
+        current_time=30.0,
+        queue_ahead=1,
+        n_tables=40,
+        dining_time_distribution=distribution,
+        n_simulations=500,
+        random_state=5,
+    )
+
+    table_ages = result["table_ages_used"]
+    assert np.max(table_ages) <= 30.0
+    assert float(result["mean_wait"]) > 20.0

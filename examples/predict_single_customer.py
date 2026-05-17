@@ -17,7 +17,7 @@ def main() -> None:
     current_time = 135.0
     queue_ahead = 18
     n_tables = 40
-    distribution = TruncatedWeibullDiningTime(shape=3.0, scale=95.0, max_time=120.0)
+    distribution = TruncatedWeibullDiningTime(shape=8.0, scale=95.0, max_time=120.0)
 
     result = predict_entry_time(
         current_time=current_time,
@@ -44,4 +44,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

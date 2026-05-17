@@ -14,7 +14,7 @@ from queue_model.utils import minutes_to_clock
 
 def main() -> None:
     """Run the requested synthetic 18:00 demo."""
-    distribution = TruncatedWeibullDiningTime(shape=3.0, scale=95.0, max_time=120.0)
+    distribution = TruncatedWeibullDiningTime(shape=8.0, scale=95.0, max_time=120.0)
     result = predict_entry_time(
         current_time=120.0,
         queue_ahead=20,
@@ -39,4 +39,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -160,8 +160,11 @@ def cached_prediction(
         lognormal_sigma=lognormal_sigma,
     )
     table_ages = None
+    current_state_model = "transient"
     if table_age_mode == "统一桌龄":
         table_ages = np.full(n_tables, uniform_age, dtype=float)
+    elif table_age_mode == "平稳近似":
+        current_state_model = "stationary"
 
     return predict_entry_time(
         current_time=current_time,
@@ -169,6 +172,7 @@ def cached_prediction(
         n_tables=n_tables,
         dining_time_distribution=distribution,
         table_ages=table_ages,
+        current_state_model=current_state_model,
         n_simulations=n_simulations,
         random_state=random_seed,
     )
@@ -250,13 +254,13 @@ def render_single_prediction(
         st.subheader("现场状态")
         current_label = st.select_slider("当前时间", options=list(TIME_OPTIONS.keys()), value="18:00")
         queue_ahead = st.number_input("前方桌数", min_value=0, max_value=260, value=20, step=1)
-        table_age_mode = st.radio("当前桌龄", ["平稳近似", "统一桌龄"], horizontal=True)
+        table_age_mode = st.radio("当前桌龄", ["从16:00开门模拟", "平稳近似", "统一桌龄"], horizontal=True)
         uniform_age = 45.0
         if table_age_mode == "统一桌龄":
             uniform_age = st.slider("每桌已用餐分钟数", min_value=0.0, max_value=119.0, value=45.0, step=1.0)
 
         run_button = st.button("更新预测", type="primary", use_container_width=True)
-        st.caption("平稳近似适用于持续满座、空桌立即补位的场景。")
+        st.caption("默认从 16:00 第一波入座开始模拟；平稳近似只适合较晚且接近稳定的满座时段。")
 
     with output_col:
         current_time = TIME_OPTIONS[current_label]
@@ -347,7 +351,7 @@ def render_comparison(
                 weibull_scale=weibull_scale,
                 lognormal_median=lognormal_median,
                 lognormal_sigma=lognormal_sigma,
-                table_age_mode="平稳近似",
+                table_age_mode="从16:00开门模拟",
                 uniform_age=45.0,
                 n_simulations=max(800, n_simulations // 3),
                 random_seed=random_seed + 100 + index,
@@ -380,12 +384,12 @@ def render_sidebar():
 
         st.divider()
         distribution_name = st.radio("用餐时间分布", ["Weibull", "Lognormal"], horizontal=True)
-        weibull_shape = 3.0
+        weibull_shape = 8.0
         weibull_scale = 95.0
         lognormal_median = 90.0
         lognormal_sigma = 0.35
         if distribution_name == "Weibull":
-            weibull_shape = st.slider("Weibull shape", min_value=0.8, max_value=8.0, value=3.0, step=0.1)
+            weibull_shape = st.slider("Weibull shape", min_value=0.8, max_value=12.0, value=8.0, step=0.1)
             weibull_scale = st.slider("Weibull scale", min_value=40.0, max_value=140.0, value=95.0, step=1.0)
         else:
             lognormal_median = st.slider("Lognormal median", min_value=40.0, max_value=120.0, value=90.0, step=1.0)

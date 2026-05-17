@@ -7,7 +7,7 @@ from typing import Sequence
 import numpy as np
 
 from queue_model.distributions import DiningTimeDistribution
-from queue_model.simulation import monte_carlo_waiting_time
+from queue_model.simulation import monte_carlo_waiting_time, monte_carlo_waiting_time_from_opening
 from queue_model.utils import RandomStateLike, get_rng
 
 
@@ -41,15 +41,18 @@ def predict_entry_time(
     n_tables: int,
     dining_time_distribution: DiningTimeDistribution,
     table_ages: Sequence[float] | None = None,
+    current_state_model: str = "transient",
     n_simulations: int = 10000,
     random_state: RandomStateLike = None,
-) -> dict[str, float | np.ndarray]:
+) -> dict[str, float | np.ndarray | str]:
     """Predict waiting and entry-time distribution summaries for one customer.
 
     Returns summary statistics plus raw ``waiting_time_samples`` and
     ``entry_time_samples`` so callers can plot or compute custom probabilities.
-    If ``table_ages`` is missing, ages are sampled from the approximate
-    stationary renewal age distribution for a continuously full restaurant.
+    If ``table_ages`` is missing, ``current_state_model="transient"`` simulates
+    the saturated table process from 16:00 to ``current_time``. Use
+    ``current_state_model="stationary"`` for the old equilibrium-age
+    approximation.
     """
     if current_time < 0:
         raise ValueError("current_time must be non-negative.")
@@ -57,25 +60,43 @@ def predict_entry_time(
         raise ValueError("n_tables must be positive.")
 
     rng = get_rng(random_state)
-    if table_ages is None:
+    if current_state_model not in {"transient", "stationary"}:
+        raise ValueError("current_state_model must be 'transient' or 'stationary'.")
+
+    if table_ages is None and current_state_model == "stationary":
         ages = generate_stationary_table_ages(n_tables, dining_time_distribution, random_state=rng)
+        wait_samples = monte_carlo_waiting_time(
+            queue_ahead=queue_ahead,
+            table_ages=ages,
+            dining_time_distribution=dining_time_distribution,
+            n_simulations=n_simulations,
+            random_state=rng,
+        )
+    elif table_ages is None:
+        wait_samples, ages = monte_carlo_waiting_time_from_opening(
+            current_time=current_time,
+            queue_ahead=queue_ahead,
+            n_tables=n_tables,
+            dining_time_distribution=dining_time_distribution,
+            n_simulations=n_simulations,
+            random_state=rng,
+        )
     else:
         ages = np.asarray(table_ages, dtype=float)
         if ages.shape != (n_tables,):
             raise ValueError("table_ages must have length n_tables.")
         if np.any(ages < 0) or np.any(ages >= dining_time_distribution.max_time):
             raise ValueError("table_ages must be in [0, max_time).")
-
-    wait_samples = monte_carlo_waiting_time(
-        queue_ahead=queue_ahead,
-        table_ages=ages,
-        dining_time_distribution=dining_time_distribution,
-        n_simulations=n_simulations,
-        random_state=rng,
-    )
+        wait_samples = monte_carlo_waiting_time(
+            queue_ahead=queue_ahead,
+            table_ages=ages,
+            dining_time_distribution=dining_time_distribution,
+            n_simulations=n_simulations,
+            random_state=rng,
+        )
     entry_samples = current_time + wait_samples
 
-    result: dict[str, float | np.ndarray] = {
+    result: dict[str, float | np.ndarray | str] = {
         "mean_wait": float(np.mean(wait_samples)),
         "median_wait": float(np.median(wait_samples)),
         "q10_wait": float(np.quantile(wait_samples, 0.10)),
@@ -90,6 +111,6 @@ def predict_entry_time(
         "waiting_time_samples": wait_samples,
         "entry_time_samples": entry_samples,
         "table_ages_used": ages,
+        "current_state_model": current_state_model if table_ages is None else "provided_table_ages",
     }
     return result
-

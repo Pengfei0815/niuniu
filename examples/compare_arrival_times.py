@@ -17,7 +17,7 @@ from queue_model.plotting import plot_arrival_time_comparison
 
 def main() -> None:
     """Run a synthetic comparison and save a matplotlib figure."""
-    distribution = TruncatedWeibullDiningTime(shape=3.0, scale=95.0, max_time=120.0)
+    distribution = TruncatedWeibullDiningTime(shape=8.0, scale=95.0, max_time=120.0)
     scenarios = [
         ("16:30", 30.0, 8),
         ("17:00", 60.0, 14),

@@ -63,56 +63,73 @@ def configure_page() -> None:
         """
         <style>
         .block-container {
-            padding-top: 2.2rem;
+            max-width: 1180px;
+            padding-top: 1.1rem;
             padding-bottom: 2.4rem;
+            padding-left: 1.1rem;
+            padding-right: 1.1rem;
+        }
+        .hero {
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 18px;
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 1rem;
+            background:
+                linear-gradient(135deg, rgba(10, 95, 115, 0.12), rgba(214, 125, 48, 0.12)),
+                #ffffff;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
         }
         .app-title {
             display: block;
-            font-size: 2.35rem;
-            font-weight: 760;
-            color: #102A43;
-            line-height: 1.32;
-            min-height: 3.2rem;
-            padding-top: 0.15rem;
-            padding-bottom: 0.1rem;
+            font-size: 2.45rem;
+            font-weight: 820;
+            color: #0F2433;
+            line-height: 1.08;
             margin-bottom: 0.2rem;
             overflow: visible;
-            overflow-wrap: anywhere;
+            letter-spacing: 0;
         }
         .app-subtitle {
-            color: #52606D;
+            color: #4B5563;
             font-size: 1.02rem;
-            margin-bottom: 0.55rem;
+            margin-bottom: 0;
         }
-        .repo-note {
+        .footer-note {
+            margin-top: 1.6rem;
+            padding-top: 1rem;
+            border-top: 1px solid #E5E7EB;
             color: #52606D;
-            font-size: 0.92rem;
-            margin-bottom: 1.0rem;
+            font-size: 0.94rem;
+            text-align: center;
         }
-        .repo-note a {
+        .footer-note a {
             color: #0B7285;
             font-weight: 650;
             text-decoration: none;
         }
-        .repo-note a:hover {
+        .footer-note a:hover {
             text-decoration: underline;
         }
         .summary-band {
-            border: 1px solid #D9E2EC;
-            border-radius: 8px;
-            padding: 0.8rem 1.0rem;
-            background: #F8FAFC;
-            margin: 0.7rem 0 1.1rem 0;
+            border: 1px solid rgba(11, 114, 133, 0.16);
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+            background: linear-gradient(180deg, #FFFFFF, #F8FAFC);
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+            margin: 0 0 1rem 0;
         }
         .clock-text {
-            font-size: 1.65rem;
-            font-weight: 760;
+            font-size: 1.9rem;
+            font-weight: 820;
             color: #0B7285;
+            line-height: 1.18;
+            margin-bottom: 0.55rem;
         }
         .risk-text {
-            font-size: 1.65rem;
-            font-weight: 760;
+            font-size: 1.9rem;
+            font-weight: 820;
             color: #C2410C;
+            line-height: 1.18;
         }
         .caption {
             color: #66788A;
@@ -120,9 +137,44 @@ def configure_page() -> None:
         }
         div[data-testid="stMetric"] {
             background: #FFFFFF;
-            border: 1px solid #D9E2EC;
-            border-radius: 8px;
-            padding: 0.8rem 0.9rem;
+            border: 1px solid #E5E7EB;
+            border-radius: 14px;
+            padding: 0.7rem 0.8rem;
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.055);
+        }
+        div[data-testid="stMetricLabel"] {
+            color: #64748B;
+        }
+        .stButton > button {
+            border-radius: 12px;
+            min-height: 2.8rem;
+            font-weight: 700;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 0.35rem;
+        }
+        .stTabs [data-baseweb="tab"] {
+            border-radius: 999px;
+            padding: 0.45rem 0.9rem;
+        }
+        @media (max-width: 760px) {
+            .block-container {
+                padding: 0.7rem 0.75rem 1.8rem 0.75rem;
+            }
+            .hero {
+                border-radius: 16px;
+                padding: 0.95rem 1rem;
+            }
+            .app-title {
+                font-size: 2.0rem;
+            }
+            .app-subtitle {
+                font-size: 0.94rem;
+            }
+            .clock-text,
+            .risk-text {
+                font-size: 1.55rem;
+            }
         }
         </style>
         """,
@@ -256,7 +308,7 @@ def render_single_prediction(
     random_seed: int,
 ) -> None:
     """Render the single-customer prediction tab."""
-    input_col, output_col = st.columns([0.9, 1.5], gap="large")
+    input_col, output_col = st.columns([0.95, 1.35], gap="medium")
     with input_col:
         st.subheader("现场状态")
         current_label = st.select_slider("当前时间", options=list(TIME_OPTIONS.keys()), value="18:00")
@@ -299,13 +351,13 @@ def render_single_prediction(
             unsafe_allow_html=True,
         )
 
-        metric_cols = st.columns(4)
+        metric_cols = st.columns(4, gap="small")
         metric_cols[0].metric("平均等待", f"{float(result['mean_wait']):.1f} 分钟")
         metric_cols[1].metric("中位等待", f"{float(result['median_wait']):.1f} 分钟")
         metric_cols[2].metric("10% 分位", f"{float(result['q10_wait']):.1f} 分钟")
         metric_cols[3].metric("90% 分位", f"{float(result['q90_wait']):.1f} 分钟")
 
-        probability_cols = st.columns(3)
+        probability_cols = st.columns(3, gap="small")
         with probability_cols[0]:
             render_probability("30 分钟内进场", float(result["p_wait_le_30"]))
         with probability_cols[1]:
@@ -313,7 +365,7 @@ def render_single_prediction(
         with probability_cols[2]:
             render_probability("90 分钟内进场", float(result["p_wait_le_90"]))
 
-    chart_col, entry_col = st.columns([1.2, 1.0], gap="large")
+    chart_col, entry_col = st.columns([1.2, 1.0], gap="medium")
     with chart_col:
         st.pyplot(waiting_time_figure(np.asarray(result["waiting_time_samples"])), clear_figure=True)
     with entry_col:
@@ -433,19 +485,10 @@ def render_sidebar():
 def main() -> None:
     """Run the Streamlit application."""
     configure_page()
-    st.markdown('<div class="app-title">何时吃上牛</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="app-subtitle">基于截断生存模型和 Monte Carlo 释放过程的交互式预测界面。</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="repo-note">
-          GitHub:
-          <a href="https://github.com/Pengfei0815/niuniu" target="_blank">
-            Pengfei0815/niuniu
-          </a>
-          · 欢迎共同维护，也欢迎 fork 后改进。
+        """<div class="hero">
+          <div class="app-title">何时吃上牛</div>
+          <div class="app-subtitle">排队不是玄学。用生存模型估计你大概什么时候能吃上牛牛。</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -460,6 +503,19 @@ def main() -> None:
         render_single_prediction(*params)
     with tab_compare:
         render_comparison(*params)
+
+    st.markdown(
+        """
+        <div class="footer-note">
+          不要让你的人生在等待牛牛的时间虚度！<br>
+          GitHub:
+          <a href="https://github.com/Pengfei0815/niuniu" target="_blank">
+            https://github.com/Pengfei0815/niuniu
+          </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 if __name__ == "__main__":
